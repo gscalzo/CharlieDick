@@ -10,21 +10,29 @@ class CharlieDickWindow < Gosu::Window
 
     @cursor = Gosu::Image.new(self, "Images/components/cursor.png", false)
     @menu = Menu.new(self)
+    @quitButton = Menu.new(self)
+    button_img = Gosu::Image.new(self, "Images/components/quitButton.png", false)
+    @quitButton.add_item(button_img, 
+            550, 20, 30, lambda{abort('')}, 
+            button_img)
    end
 
    def draw
     @cursor.draw(self.mouse_x, self.mouse_y, 20)
     @background_image.draw(0, 0, 1)
     @menu.draw
+    @quitButton.draw
   end
 
   def update
     @menu.update
+    @quitButton.update
   end
   
   def button_down (id)
     if id == Gosu::MsLeft then
       @menu.clicked
+      @quitButton.clicked
     end
   end
   
@@ -40,9 +48,9 @@ class StartWindow < CharlieDickWindow
    y = 800
 
    @menu = Menu.new(self)
-   @menu.add_item(Gosu::Image.new(self, button_img, false), 
+   @menu.add_item(button_img, 
    					x, y, 1, lambda{start_game}, 
-   					Gosu::Image.new(self, button_img, false))
+   					button_img)
   end
 
   def start_game
@@ -122,7 +130,7 @@ class GameWindow < CharlieDickWindow
     reset_ok_button
     reset_checks
     playSong("applause")  
-    @charliedick = Gosu::Image.new(self, "Images/right1.png", false)
+    @charliedick = Gosu::Image.new(self, "Images/right#{1+Random.rand(1024)%2}.png", false)
     @callback_to_do = lambda do
       new_game
     end
@@ -133,7 +141,7 @@ class GameWindow < CharlieDickWindow
     reset_ok_button
     reset_checks
     playSong("sadtrombone")  
-    @charliedick = Gosu::Image.new(self, "Images/wrong1.png", false)
+    @charliedick = Gosu::Image.new(self, "Images/wrong#{1+Random.rand(1024)%2}.png", false)
     @callback_to_do = lambda do
       reset_charliedick
     end
